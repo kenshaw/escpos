@@ -2,7 +2,9 @@
 
 This is a quick and dirty Golang implementation of a [Epson TM-Intelligent](https://c4b.epson-biz.com/) 
 print server. This also serves as example code for the
-[escpos](https://github.com/knq/escpos) package.
+[escpos](https://github.com/knq/escpos) package. This is "more-or-less"
+compatible with the ePOS-Print API and shows how ePOS-XML is translated into
+simple ESCPOS data.
 
 This has been tested and works as expected on Linux.
 
@@ -16,12 +18,12 @@ like the following for your system:
 
     sudo aptitude install libxml2 libxml2-dev
 
-You should then be able to install via the following:
+Then install via the following:
 
     go get -u github.com/knq/escpos/epos-server
 
 
-You should then be able to build the epos-server like the following:
+You should then be able to build the epos-server like this:
 
     go build github.com/knq/escpos/epos-server
 

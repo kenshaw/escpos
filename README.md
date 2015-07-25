@@ -1,8 +1,8 @@
-# About ESCPOS #
+# About escpos #
 
 This is a simple [Golang](http://www.golang.org/project)
 [ESC-POS](https://en.wikipedia.org/wiki/ESC/P) library that can write to a
-ESC-POS capabale printer such as an Epson TM
+ESC-POS capabale printer such as an Epson TM-T82 or similar.
 
 These printers are often used in retail environments in conjunction with a
 point-of-sale (POS) system.
@@ -13,7 +13,7 @@ Install the package via the following:
 
     go get -u github.com/knq/escpos
 
-## EPOS-Server ##
+## Example epos-server ##
 
 An example EPOS server implementation is available in the
 [epos-server](epos-server) subdirectory of this project. This example
