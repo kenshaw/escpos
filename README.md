@@ -1,8 +1,9 @@
 # About escpos #
 
-This is a simple [Golang](http://www.golang.org/project)
-[ESC-POS](https://en.wikipedia.org/wiki/ESC/P) library that can write to a
-ESC-POS capabale printer such as an Epson TM-T82 or similar.
+This is a simple [Golang](http://www.golang.org/project) package that provides
+[ESC-POS](https://en.wikipedia.org/wiki/ESC/P) library functions to help with
+sending control codes to a ESC-POS capable printer such as an Epson TM-T82 or
+similar.
 
 These printers are often used in retail environments in conjunction with a
 point-of-sale (POS) system.
@@ -34,7 +35,7 @@ The escpos package can be used similarly to the following:
     )
 
     func main() {
-        f, err := os.Create("/dev/usb/lp3")
+        f, err := os.Open("/dev/usb/lp3")
         if err != nil {
             panic(err)
         }
