@@ -108,6 +108,11 @@ func (e *Escpos) Cut() {
 	e.Write("\x1DVA0")
 }
 
+// send cash
+func (e *Escpos) Cash() {
+	e.Write("\x1B\x70\x00\x0A\xFF")
+}
+
 // send linefeed
 func (e *Escpos) Linefeed() {
 	e.Write("\n")
