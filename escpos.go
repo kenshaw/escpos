@@ -459,7 +459,7 @@ func (e *Escpos) Barcode(barcode string,format int) {
 		e.Write(fmt.Sprintf("\x1dk"+code+"%v\x00", barcode))
 	}
 	e.Write(fmt.Sprintf("%v", barcode))
-	e.reset()
+	
 }
 
 // used to send graphics headers
