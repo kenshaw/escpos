@@ -83,3 +83,8 @@ func main() {
     w.Flush()
 }
 ```
+
+## TODO
+- Fix barcode/image support
+- Update code to be idiomatic Go
+- Fix example server implementation

@@ -433,6 +433,11 @@ func (e *Escpos) FeedAndCut(params map[string]string) {
 	e.Cut()
 }
 
+// Barcode sends a barcode to the printer.
+func (e *Escpos) Barcode(code string) {
+	e.Write(fmt.Sprintf("\x1dk\x04%s\x00", strings.ToUpper(code)))
+}
+
 // used to send graphics headers
 func (e *Escpos) gSend(m byte, fn byte, data []byte) {
 	l := len(data) + 2
