@@ -434,8 +434,32 @@ func (e *Escpos) FeedAndCut(params map[string]string) {
 }
 
 // Barcode sends a barcode to the printer.
-func (e *Escpos) Barcode(code string) {
-	e.Write(fmt.Sprintf("\x1dk\x04%s\x00", strings.ToUpper(code)))
+func (e *Escpos) Barcode(code string,format int) {
+
+	code := ""
+	switch format {
+	case 0:
+		code = "\x00"
+	case 1:
+		code = "\x01"
+	case 2:
+		code = "\x02"
+	case 3:
+		code = "\x03"
+	case 4:
+		code = "\x04"
+	case 73:
+		code = "\x49"
+	}
+	e.reset()
+	e.SetAlign("center")
+	if format > 69 {
+		e.Write(fmt.Sprintf("\x1dk"+code+"%v%v", len(barcode), barcode))
+	} else if format < 69 {
+		e.Write(fmt.Sprintf("\x1dk"+code+"%v\x00", barcode))
+	}
+	e.Write(fmt.Sprintf("%v", barcode))
+	e.reset()
 }
 
 // used to send graphics headers
