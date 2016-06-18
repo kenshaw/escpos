@@ -434,7 +434,7 @@ func (e *Escpos) FeedAndCut(params map[string]string) {
 }
 
 // Barcode sends a barcode to the printer.
-func (e *Escpos) Barcode(code string,format int) {
+func (e *Escpos) Barcode(barcode string,format int) {
 
 	code := ""
 	switch format {
