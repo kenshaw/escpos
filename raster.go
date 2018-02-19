@@ -4,7 +4,7 @@ const (
 	GS8L_MAX_Y = 1662
 )
 
-func (e *Escpos) Raster(width, height int, img_bw []byte) {
+func (e *Escpos) Raster(width, height, bytesWidth int, img_bw []byte) {
 	flushCmd := []byte{
 		/* GS ( L, Print the graphics data in the print buffer,
 		   p. 241 Moves print position to the left side of the
@@ -15,18 +15,13 @@ func (e *Escpos) Raster(width, height int, img_bw []byte) {
 		0x32,
 	}
 
-	bw := width / 8
-	if width%8 != 0 {
-		bw += 1
-	}
-
 	for l := 0; l < height; {
 		n_lines := GS8L_MAX_Y
 		if n_lines > height-l {
 			n_lines = height - l
 		}
 
-		f112_p := 10 + n_lines*bw
+		f112_p := 10 + n_lines*bytesWidth
 		storeCmd := []byte{
 			/* GS 8 L, Store the graphics data in the print buffer
 			   (raster format), p. 252 */
@@ -47,7 +42,7 @@ func (e *Escpos) Raster(width, height int, img_bw []byte) {
 		}
 
 		e.WriteRaw(storeCmd)
-		e.WriteRaw(img_bw[l*bw : l*bw+n_lines*bw])
+		e.WriteRaw(img_bw[l*bytesWidth : (l+n_lines)*bytesWidth])
 		e.WriteRaw(flushCmd)
 
 		l += n_lines
