@@ -367,7 +367,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(x); err == nil {
 			e.SendMoveX(uint16(i))
 		} else {
-			log.Fatal("Invalid x param %d", x)
+			log.Fatalf("Invalid x param %s", x)
 		}
 	}
 
@@ -376,7 +376,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(y); err == nil {
 			e.SendMoveY(uint16(i))
 		} else {
-			log.Fatal("Invalid y param %d", y)
+			log.Fatalf("Invalid y param %s", y)
 		}
 	}
 
@@ -394,7 +394,7 @@ func (e *Escpos) Feed(params map[string]string) {
 		if i, err := strconv.Atoi(l); err == nil {
 			e.FormfeedN(i)
 		} else {
-			log.Fatal(fmt.Sprintf("Invalid line number %d", l))
+			log.Fatal(fmt.Sprintf("Invalid line number %s", l))
 		}
 	}
 
@@ -403,7 +403,7 @@ func (e *Escpos) Feed(params map[string]string) {
 		if i, err := strconv.Atoi(u); err == nil {
 			e.SendMoveY(uint16(i))
 		} else {
-			log.Fatal(fmt.Sprintf("Invalid unit number %d", u))
+			log.Fatal(fmt.Sprintf("Invalid unit number %s", u))
 		}
 	}
 
@@ -497,13 +497,13 @@ func (e *Escpos) Image(params map[string]string, data string) {
 	// convert width
 	width, err := strconv.Atoi(wstr)
 	if err != nil {
-		log.Fatal("Invalid image width %s", wstr)
+		log.Fatalf("Invalid image width %s", wstr)
 	}
 
 	// convert height
 	height, err := strconv.Atoi(hstr)
 	if err != nil {
-		log.Fatal("Invalid image height %s", hstr)
+		log.Fatalf("Invalid image height %s", hstr)
 	}
 
 	// decode data frome b64 string
