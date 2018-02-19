@@ -76,7 +76,7 @@ func (s *EposServer) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	// stop if its options
 	if req.Method == "OPTIONS" {
-		log.Println("OPTIONS %s", req.URL)
+		log.Printf("OPTIONS %s\n", req.URL)
 		return
 	}
 
