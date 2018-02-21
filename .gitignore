@@ -1,1 +1,2 @@
-epos-server/epos-server
+/cmd/epos-server/epos-server
+/cmd/epos-server/epos-server.exe

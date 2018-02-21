@@ -1,9 +1,8 @@
 # About escpos #
 
-This is a simple [Golang](http://www.golang.org/project) package that provides
-[ESC-POS](https://en.wikipedia.org/wiki/ESC/P) library functions to help with
-sending control codes to a ESC-POS capable printer such as an Epson TM-T82 or
-similar.
+This is a simple [Go][1] package that provides [ESC-POS][2] library functions
+to help with sending control codes to a ESC-POS capable printer such as an
+Epson TM-T82 or similar.
 
 These printers are often used in retail environments in conjunction with a
 point-of-sale (POS) system.
@@ -12,14 +11,13 @@ point-of-sale (POS) system.
 
 Install the package via the following:
 
-    go get -u github.com/knq/escpos
+    go get -u github.com/kenshaw/escpos
 
 ## Example epos-server ##
 
-An example EPOS server implementation is available in the
-[epos-server](epos-server) subdirectory of this project. This example
-server is more or less compatible with [Epson TM-Intelligent](https://c4b.epson-biz.com)
-printers and print server implementations.
+An example EPOS server implementation is available in the [cmd/epos-server][3]
+subdirectory of this project. This example server is more or less compatible
+with [Epson TM-Intelligent][4] printers and print server implementations.
 
 ## Usage ##
 
@@ -32,7 +30,7 @@ import (
     "bufio"
     "os"
 
-    "github.com/knq/escpos"
+    "github.com/kenshaw/escpos"
 )
 
 func main() {
@@ -86,5 +84,8 @@ func main() {
 
 ## TODO
 - Fix barcode/image support
-- Update code to be idiomatic Go
-- Fix example server implementation
+
+[1]: http://www.golang.org/project
+[2]: https://en.wikipedia.org/wiki/ESC/P
+[3]: cmd/epos-server
+[4]: https://c4b.epson-biz.com
