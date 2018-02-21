@@ -120,7 +120,7 @@ func (e *Escpos) Linefeed() {
 
 // send N formfeeds
 func (e *Escpos) FormfeedN(n int) {
-	e.Write(fmt.Sprintf("\x1Bd%c", 1))
+	e.Write(fmt.Sprintf("\x1Bd%c", n))
 }
 
 // send formfeed
