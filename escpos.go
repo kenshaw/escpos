@@ -140,7 +140,7 @@ func (e *Escpos) SetFont(font string) {
 	case "C":
 		f = 2
 	default:
-		log.Fatal(fmt.Sprintf("Invalid font: '%s', defaulting to 'A'", font))
+		log.Fatalf("Invalid font: '%s', defaulting to 'A'", font)
 		f = 0
 	}
 
@@ -158,7 +158,7 @@ func (e *Escpos) SetFontSize(width, height uint8) {
 		e.height = height
 		e.SendFontSize()
 	} else {
-		log.Fatal(fmt.Sprintf("Invalid font size passed: %d x %d", width, height))
+		log.Fatalf("Invalid font size passed: %d x %d", width, height)
 	}
 }
 
@@ -255,7 +255,7 @@ func (e *Escpos) SetAlign(align string) {
 	case "right":
 		a = 2
 	default:
-		log.Fatal(fmt.Sprintf("Invalid alignment: %s", align))
+		log.Fatalf("Invalid alignment: %s", align)
 	}
 	e.Write(fmt.Sprintf("\x1Ba%c", a))
 }
@@ -286,7 +286,7 @@ func (e *Escpos) SetLang(lang string) {
 	case "no":
 		l = 9
 	default:
-		log.Fatal(fmt.Sprintf("Invalid language: %s", lang))
+		log.Fatalf("Invalid language: %s", lang)
 	}
 	e.Write(fmt.Sprintf("\x1BR%c", l))
 }
@@ -349,7 +349,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(width); err == nil {
 			e.SetFontSize(uint8(i), e.height)
 		} else {
-			log.Fatal(fmt.Sprintf("Invalid font width: %s", width))
+			log.Fatalf("Invalid font width: %s", width)
 		}
 	}
 
@@ -358,7 +358,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(height); err == nil {
 			e.SetFontSize(e.width, uint8(i))
 		} else {
-			log.Fatal(fmt.Sprintf("Invalid font height: %s", height))
+			log.Fatalf("Invalid font height: %s", height)
 		}
 	}
 
@@ -394,7 +394,7 @@ func (e *Escpos) Feed(params map[string]string) {
 		if i, err := strconv.Atoi(l); err == nil {
 			e.FormfeedN(i)
 		} else {
-			log.Fatal(fmt.Sprintf("Invalid line number %s", l))
+			log.Fatalf("Invalid line number %s", l)
 		}
 	}
 
@@ -403,7 +403,7 @@ func (e *Escpos) Feed(params map[string]string) {
 		if i, err := strconv.Atoi(u); err == nil {
 			e.SendMoveY(uint16(i))
 		} else {
-			log.Fatal(fmt.Sprintf("Invalid unit number %s", u))
+			log.Fatalf("Invalid unit number %s", u)
 		}
 	}
 
