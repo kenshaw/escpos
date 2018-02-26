@@ -10,8 +10,8 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/ISI-nc/escpos"
-	"github.com/ISI-nc/escpos/raster"
+	"github.com/kenshaw/escpos"
+	"github.com/kenshaw/escpos/raster"
 )
 
 var (
@@ -49,7 +49,10 @@ func main() {
 	defer f.Close()
 	log.Print(*lpDev, " open.")
 
-	ep := escpos.New(f)
+	ep, err := escpos.NewPrinter(f)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	ep.Init()
 
