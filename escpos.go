@@ -40,6 +40,8 @@ func textReplace(data string) string {
 type Escpos struct {
 	// destination
 	dst io.Writer
+	// source
+	src io.Reader
 
 	// font metrics
 	width, height uint8
@@ -69,8 +71,8 @@ func (e *Escpos) reset() {
 }
 
 // create Escpos printer
-func New(dst io.Writer) (e *Escpos) {
-	e = &Escpos{dst: dst}
+func New(dst io.Writer, src io.Reader) (e *Escpos) {
+	e = &Escpos{dst: dst, src: src}
 	e.reset()
 	return
 }
@@ -85,6 +87,11 @@ func (e *Escpos) WriteRaw(data []byte) (n int, err error) {
 	}
 
 	return 0, nil
+}
+
+// read raw bytes from printer
+func (e *Escpos) ReadRaw(data []byte) (n int, err error) {
+	return e.src.Read(data)
 }
 
 // write a string to the printer
@@ -559,4 +566,21 @@ func (e *Escpos) WriteNode(name string, params map[string]string, data string) {
 	case "image":
 		e.Image(params, data)
 	}
+}
+
+//DLE ASCII
+const DLE = 0x10
+
+//EOT ASCII
+const EOT = 0x04
+
+// ReadStatus Read the status n from the printer
+func (e *Escpos) ReadStatus(n byte) (byte, error) {
+	e.WriteRaw([]byte{DLE, EOT, n})
+	data := make([]byte, 1)
+	_, err := e.ReadRaw(data)
+	if err != nil {
+		return 0, err
+	}
+	return data[0], nil
 }
