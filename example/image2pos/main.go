@@ -41,7 +41,7 @@ func main() {
 
 	// ----------------------------------------------------------------------
 
-	f, err := os.OpenFile(*lpDev, os.O_WRONLY, 0)
+	f, err := os.OpenFile(*lpDev, os.O_RDWR, 0)
 	if err != nil {
 		log.Fatal(err)
 	}

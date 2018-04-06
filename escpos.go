@@ -9,6 +9,14 @@ import (
 	"strings"
 )
 
+const (
+	// ASCII DLE (DataLinkEscape)
+	DLE byte = 0x10
+
+	// ASCII EOT (EndOfTransmission)
+	EOT byte = 0x04
+)
+
 // text replacement map
 var textReplaceMap = map[string]string{
 	// horizontal tab
@@ -39,7 +47,7 @@ func textReplace(data string) string {
 
 type Escpos struct {
 	// destination
-	dst io.Writer
+	dst io.ReadWriter
 
 	// font metrics
 	width, height uint8
@@ -69,7 +77,7 @@ func (e *Escpos) reset() {
 }
 
 // create Escpos printer
-func New(dst io.Writer) (e *Escpos) {
+func New(dst io.ReadWriter) (e *Escpos) {
 	e = &Escpos{dst: dst}
 	e.reset()
 	return
@@ -85,6 +93,11 @@ func (e *Escpos) WriteRaw(data []byte) (n int, err error) {
 	}
 
 	return 0, nil
+}
+
+// read raw bytes from printer
+func (e *Escpos) ReadRaw(data []byte) (n int, err error) {
+	return e.dst.Read(data)
 }
 
 // write a string to the printer
@@ -559,4 +572,15 @@ func (e *Escpos) WriteNode(name string, params map[string]string, data string) {
 	case "image":
 		e.Image(params, data)
 	}
+}
+
+// ReadStatus Read the status n from the printer
+func (e *Escpos) ReadStatus(n byte) (byte, error) {
+	e.WriteRaw([]byte{DLE, EOT, n})
+	data := make([]byte, 1)
+	_, err := e.ReadRaw(data)
+	if err != nil {
+		return 0, err
+	}
+	return data[0], nil
 }
