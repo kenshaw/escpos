@@ -49,7 +49,7 @@ func main() {
 	defer f.Close()
 	log.Print(*lpDev, " open.")
 
-	ep := escpos.New(f, f)
+	ep := escpos.New(f)
 
 	ep.Init()
 
