@@ -15,6 +15,9 @@ const (
 
 	// ASCII EOT (EndOfTransmission)
 	EOT byte = 0x04
+
+	// ASCII GS (Group Separator)
+	GS byte = 0x1D
 )
 
 // text replacement map
@@ -119,6 +122,11 @@ func (e *Escpos) End() {
 // send cut
 func (e *Escpos) Cut() {
 	e.Write("\x1DVA0")
+}
+
+// send cut minus one point (partial cut)
+func (e *Escpos) CutPartial() {
+	e.WriteRaw([]byte{GS, 0x56, 1})
 }
 
 // send cash
