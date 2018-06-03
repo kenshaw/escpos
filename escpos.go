@@ -1,14 +1,21 @@
 package escpos
 
 import (
+	"cloudinn/escpos/raster"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"image"
 	"io"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
+
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 )
 
 // Printer wraps sending ESC-POS commands to a io.Writer.
@@ -563,3 +570,24 @@ var textReplacer = strings.NewReplacer(
 	// &amp; (ampersand) must be last to avoid double decoding
 	"&amp;", "&",
 )
+
+// PrintImage Print Image
+func (p *Printer) PrintImage(imgPath string) {
+	imgFile, err := os.Open(imgPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	img, imgFormat, err := image.Decode(imgFile)
+	imgFile.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print("Loaded image, format: ", imgFormat)
+
+	rasterConv := &raster.Converter{
+		MaxWidth:  512,
+		Threshold: 0.5,
+	}
+	rasterConv.Print(img, p)
+}
