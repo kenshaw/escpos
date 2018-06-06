@@ -1,7 +1,6 @@
 package escpos
 
 import (
-	"cloudinn/escpos/raster"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -12,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/cloudinn/escpos/raster"
 
 	_ "image/gif"
 	_ "image/jpeg"

@@ -1,11 +1,12 @@
 package connection
 
 import (
-	"cloudinn/escpos"
 	"io"
 	"log"
 	"net"
 	"os"
+
+	"github.com/cloudinn/escpos"
 )
 
 var f io.Writer
