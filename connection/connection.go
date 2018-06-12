@@ -2,6 +2,7 @@ package connection
 
 import (
 	"io"
+	"log"
 	"net"
 	"os"
 
@@ -22,11 +23,11 @@ func NewConnection(connectionType string, connectionHost string) *escpos.Printer
 
 	}
 	if err != nil {
-		return err
+		log.Println(err.Error())
 	}
 	printerObj, err := escpos.NewPrinter(f)
 	if err != nil {
-		return err
+		log.Println(err.Error())
 	}
 	return printerObj
 
