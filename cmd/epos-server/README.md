@@ -1,10 +1,9 @@
 # About epos-server #
 
-This is a quick and dirty Golang implementation of a [Epson TM-Intelligent](https://c4b.epson-biz.com/) 
-print server. This also serves as example code for the
-[escpos](https://github.com/knq/escpos) package. This is "more-or-less"
-compatible with the ePOS-Print API and shows how ePOS-XML is translated into
-simple ESCPOS data.
+This is a quick and dirty Golang implementation of a [Epson TM-Intelligent][1]
+print server. This also serves as example code for the [escpos][2] package.
+This is "more-or-less" compatible with the ePOS-Print API and shows how
+ePOS-XML is translated into simple ESCPOS data.
 
 This has been tested and works as expected on Linux.
 
@@ -20,12 +19,11 @@ like the following for your system:
 
 Then install via the following:
 
-    go get -u github.com/knq/escpos/epos-server
-
+    go get -u github.com/kenshaw/escpos/epos-server
 
 You should then be able to build the epos-server like this:
 
-    go build github.com/knq/escpos/epos-server
+    go build github.com/kenshaw/escpos/epos-server
 
 ## Usage ##
 
@@ -46,3 +44,6 @@ printer:
 The following still needs to be implemented:
 
 * Fix image decoding and printing
+
+[1]: https://c4b.epson-biz.com/
+[2]: https://github.com/kenshaw/escpos
