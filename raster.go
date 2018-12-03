@@ -1,3 +1,7 @@
+/*
+rasterization code extracted and converted to go from https://github.com/petrkutalek/png2pos/blob/master/png2pos.c
+*/
+
 package escpos
 
 const (
