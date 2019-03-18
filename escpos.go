@@ -112,11 +112,11 @@ func (e *Escpos) WriteRaw(data []byte) (n int, err error) {
 		case UTF8:
 			temp = data
 		case GB18030:
-			temp, err = simplifiedchinese.GB18030.NewDecoder().Bytes(data)
+			temp, err = simplifiedchinese.GB18030.NewEncoder().Bytes(data)
 		case GBK:
-			temp, err = simplifiedchinese.GBK.NewDecoder().Bytes(data)
+			temp, err = simplifiedchinese.GBK.NewEncoder().Bytes(data)
 		case GB2312:
-			temp, err = simplifiedchinese.HZGB2312.NewDecoder().Bytes(data)
+			temp, err = simplifiedchinese.HZGB2312.NewEncoder().Bytes(data)
 		default:
 			temp = data
 		}
