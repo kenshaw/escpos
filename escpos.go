@@ -3,6 +3,7 @@ package escpos
 import (
 	"encoding/base64"
 	"fmt"
+	"golang.org/x/text/encoding/simplifiedchinese"
 	"io"
 	"log"
 	"strconv"
@@ -48,6 +49,15 @@ func textReplace(data string) string {
 	return data
 }
 
+type Charset string
+
+const (
+	UTF8    = Charset("UTF-8")
+	GB18030 = Charset("GB18030")
+	GBK     = Charset("GBK")
+	GB2312  = Charset("GB2312")
+)
+
 type Escpos struct {
 	// destination
 	dst io.ReadWriter
@@ -63,6 +73,12 @@ type Escpos struct {
 
 	// state toggles GS[char]
 	reverse, smooth uint8
+	charset         Charset
+}
+
+// SetCharset  set charset
+func (e *Escpos) SetCharset(charset Charset) {
+	e.charset = charset
 }
 
 // reset toggles
@@ -77,6 +93,7 @@ func (e *Escpos) reset() {
 
 	e.reverse = 0
 	e.smooth = 0
+	e.charset = UTF8
 }
 
 // create Escpos printer
@@ -90,7 +107,24 @@ func New(dst io.ReadWriter) (e *Escpos) {
 func (e *Escpos) WriteRaw(data []byte) (n int, err error) {
 	if len(data) > 0 {
 		log.Printf("Writing %d bytes\n", len(data))
-		e.dst.Write(data)
+		var temp = []byte{}
+		switch e.charset {
+		case UTF8:
+			temp = data
+		case GB18030:
+			temp, err = simplifiedchinese.GB18030.NewDecoder().Bytes(data)
+		case GBK:
+			temp, err = simplifiedchinese.GBK.NewDecoder().Bytes(data)
+		case GB2312:
+			temp, err = simplifiedchinese.HZGB2312.NewDecoder().Bytes(data)
+		default:
+			temp = data
+		}
+		if err != nil {
+			log.Fatalf(err.Error())
+			return 0, err
+		}
+		e.dst.Write(temp)
 	} else {
 		log.Printf("Wrote NO bytes\n")
 	}
