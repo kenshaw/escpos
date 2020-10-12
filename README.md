@@ -36,7 +36,7 @@ import (
 )
 
 func main() {
-    f, err := os.Open("/dev/usb/lp3")
+    f, err := os.OpenFile("/dev/usb/lp3", os.O_RDWR, 0)
     if err != nil {
         panic(err)
     }
