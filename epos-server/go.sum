@@ -1,0 +1,6 @@
+github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
+github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
+github.com/knq/escpos v0.0.0-20201012084129-81d0344e35fa h1:Gqf0Q4Wra8RDXSaHwNKHcEJY0osaSklMXi5EnLLpuhM=
+github.com/knq/escpos v0.0.0-20201012084129-81d0344e35fa/go.mod h1:WEAqQJjNLSktlp0XxBiiftFrcb0RHKo9g/2hCfpYoIo=
+github.com/moovweb/gokogiri v0.0.0-20180713195410-a1a828153468 h1:s7OD9KAZ/X1BdIlXtaZUgROv/5OaFo1MlsSetrtxIis=
+github.com/moovweb/gokogiri v0.0.0-20180713195410-a1a828153468/go.mod h1:Oa/X457L/tmlvYXbM/iG0y+G1EERtHrpp7Y4fHJwsrk=
