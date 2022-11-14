@@ -4,7 +4,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
+
 	"strconv"
 	"strings"
 )
@@ -49,6 +51,9 @@ func textReplace(data string) string {
 }
 
 type Escpos struct {
+	// logger
+	logger *log.Logger
+
 	// destination
 	dst io.ReadWriter
 
@@ -81,18 +86,26 @@ func (e *Escpos) reset() {
 
 // create Escpos printer
 func New(dst io.ReadWriter) (e *Escpos) {
-	e = &Escpos{dst: dst}
+	e = &Escpos{
+		dst:    dst,
+		logger: log.New(ioutil.Discard, "", 0),
+	}
 	e.reset()
 	return
+}
+
+// SetLogger sets the logger for the Escpos object.
+func (e *Escpos) SetLogger(logger *log.Logger) {
+	e.logger = logger
 }
 
 // write raw bytes to printer
 func (e *Escpos) WriteRaw(data []byte) (n int, err error) {
 	if len(data) > 0 {
-		log.Printf("Writing %d bytes\n", len(data))
+		e.logger.Printf("Writing %d bytes\n", len(data))
 		e.dst.Write(data)
 	} else {
-		log.Printf("Wrote NO bytes\n")
+		e.logger.Printf("Wrote NO bytes\n")
 	}
 
 	return 0, nil
@@ -161,7 +174,7 @@ func (e *Escpos) SetFont(font string) {
 	case "C":
 		f = 2
 	default:
-		log.Fatalf("Invalid font: '%s', defaulting to 'A'", font)
+		e.logger.Fatalf("Invalid font: '%s', defaulting to 'A'", font)
 		f = 0
 	}
 
@@ -179,7 +192,7 @@ func (e *Escpos) SetFontSize(width, height uint8) {
 		e.height = height
 		e.SendFontSize()
 	} else {
-		log.Fatalf("Invalid font size passed: %d x %d", width, height)
+		e.logger.Fatalf("Invalid font size passed: %d x %d", width, height)
 	}
 }
 
@@ -276,7 +289,7 @@ func (e *Escpos) SetAlign(align string) {
 	case "right":
 		a = 2
 	default:
-		log.Fatalf("Invalid alignment: %s", align)
+		e.logger.Fatalf("Invalid alignment: %s", align)
 	}
 	e.Write(fmt.Sprintf("\x1Ba%c", a))
 }
@@ -307,7 +320,7 @@ func (e *Escpos) SetLang(lang string) {
 	case "no":
 		l = 9
 	default:
-		log.Fatalf("Invalid language: %s", lang)
+		e.logger.Fatalf("Invalid language: %s", lang)
 	}
 	e.Write(fmt.Sprintf("\x1BR%c", l))
 }
@@ -370,7 +383,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(width); err == nil {
 			e.SetFontSize(uint8(i), e.height)
 		} else {
-			log.Fatalf("Invalid font width: %s", width)
+			e.logger.Fatalf("Invalid font width: %s", width)
 		}
 	}
 
@@ -379,7 +392,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(height); err == nil {
 			e.SetFontSize(e.width, uint8(i))
 		} else {
-			log.Fatalf("Invalid font height: %s", height)
+			e.logger.Fatalf("Invalid font height: %s", height)
 		}
 	}
 
@@ -388,7 +401,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(x); err == nil {
 			e.SendMoveX(uint16(i))
 		} else {
-			log.Fatalf("Invalid x param %s", x)
+			e.logger.Fatalf("Invalid x param %s", x)
 		}
 	}
 
@@ -397,7 +410,7 @@ func (e *Escpos) Text(params map[string]string, data string) {
 		if i, err := strconv.Atoi(y); err == nil {
 			e.SendMoveY(uint16(i))
 		} else {
-			log.Fatalf("Invalid y param %s", y)
+			e.logger.Fatalf("Invalid y param %s", y)
 		}
 	}
 
@@ -415,7 +428,7 @@ func (e *Escpos) Feed(params map[string]string) {
 		if i, err := strconv.Atoi(l); err == nil {
 			e.FormfeedN(i)
 		} else {
-			log.Fatalf("Invalid line number %s", l)
+			e.logger.Fatalf("Invalid line number %s", l)
 		}
 	}
 
@@ -424,7 +437,7 @@ func (e *Escpos) Feed(params map[string]string) {
 		if i, err := strconv.Atoi(u); err == nil {
 			e.SendMoveY(uint16(i))
 		} else {
-			log.Fatalf("Invalid unit number %s", u)
+			e.logger.Fatalf("Invalid unit number %s", u)
 		}
 	}
 
@@ -506,34 +519,34 @@ func (e *Escpos) Image(params map[string]string, data string) {
 	// get width
 	wstr, ok := params["width"]
 	if !ok {
-		log.Fatal("No width specified on image")
+		e.logger.Fatal("No width specified on image")
 	}
 
 	// get height
 	hstr, ok := params["height"]
 	if !ok {
-		log.Fatal("No height specified on image")
+		e.logger.Fatal("No height specified on image")
 	}
 
 	// convert width
 	width, err := strconv.Atoi(wstr)
 	if err != nil {
-		log.Fatalf("Invalid image width %s", wstr)
+		e.logger.Fatalf("Invalid image width %s", wstr)
 	}
 
 	// convert height
 	height, err := strconv.Atoi(hstr)
 	if err != nil {
-		log.Fatalf("Invalid image height %s", hstr)
+		e.logger.Fatalf("Invalid image height %s", hstr)
 	}
 
 	// decode data frome b64 string
 	dec, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
-		log.Fatal(err)
+		e.logger.Fatal(err)
 	}
 
-	log.Printf("Image len:%d w: %d h: %d\n", len(dec), width, height)
+	e.logger.Printf("Image len:%d w: %d h: %d\n", len(dec), width, height)
 
 	// $imgHeader = self::dataHeader(array($img -> getWidth(), $img -> getHeight()), true);
 	// $tone = '0';
@@ -566,7 +579,7 @@ func (e *Escpos) WriteNode(name string, params map[string]string, data string) {
 		}
 		cstr = fmt.Sprintf(" => '%s'", str)
 	}
-	log.Printf("Write: %s => %+v%s\n", name, params, cstr)
+	e.logger.Printf("Write: %s => %+v%s\n", name, params, cstr)
 
 	switch name {
 	case "text":
