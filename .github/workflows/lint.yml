@@ -1,0 +1,25 @@
+name: lint
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - main
+permissions:
+  contents: read
+jobs:
+  golangci:
+    strategy:
+      matrix:
+        go: [ '1.12', '1.18' ]
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+      - uses: actions/checkout@v3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.50
