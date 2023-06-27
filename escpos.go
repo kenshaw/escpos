@@ -137,6 +137,46 @@ func (e *Escpos) Cut() {
 	e.Write("\x1DVA0")
 }
 
+type PosBeepDuration struct {
+	value byte
+}
+
+var (
+	Beep50ms  = PosBeepDuration{1}
+	Beep100ms = PosBeepDuration{2}
+	Beep150ms = PosBeepDuration{3}
+	Beep200ms = PosBeepDuration{4}
+	Beep250ms = PosBeepDuration{5}
+	Beep300ms = PosBeepDuration{6}
+	Beep350ms = PosBeepDuration{7}
+	Beep400ms = PosBeepDuration{8}
+	Beep450ms = PosBeepDuration{9}
+)
+
+func beep(n int, duration PosBeepDuration) []byte {
+	if n <= 0 {
+		return []byte{}
+	}
+
+	beepCount := n
+	if beepCount > 9 {
+		beepCount = 9
+	}
+
+	bytes := append([]byte("\x1BB"), byte(beepCount), duration.value)
+
+	bytes = append(bytes, beep(n-9, duration)...)
+
+	return bytes
+}
+
+// Beep send beep
+// n: number of beeps
+// duration: duration of beep
+func (e *Escpos) Beep(n int, duration PosBeepDuration) {
+	e.WriteRaw(beep(n, duration))
+}
+
 // send cut minus one point (partial cut)
 func (e *Escpos) CutPartial() {
 	e.WriteRaw([]byte{GS, 0x56, 1})
